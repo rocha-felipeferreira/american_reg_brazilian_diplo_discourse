@@ -1,0 +1,383 @@
+---
+title: "American Regionalism and Brazilian Diplomatic Discourse (1946-2019)"
+author: "Felipe Ferreira de Oliveira Rocha and Marcelo de Almeida Medeiros"
+output: 
+  html_document: 
+    toc: yes
+editor_options: 
+  chunk_output_type: console
+---
+
+# Info
+
+This file shows all the necessary steps to reproduce and replicate the findings of the paper "American Regionalism and Brazilian Diplomatic Discourse (1946-2019)" published by Contexto Internacional. Any doubts and information, please, contact the authors. Also, we would like to acknowledge and thank the people and staff responsible for the following packages. They were fundamental for the existence of this paper. 
+
+```{r library, message=FALSE, warning=FALSE}
+
+# Calling the packages to be used:
+library(quanteda)
+library(tidyverse)
+library(readtext)
+library(lubridate)
+library(knitr)
+library(here)
+library(cowplot)
+library(patchwork)
+
+```
+
+# Corpus 
+
+First, we import the Corpus:
+
+```{r corpus_import}
+
+paper_corpus <- readtext(file = here::here("corpus", "*.txt"), 
+                         docvarsfrom = "filenames",
+                         docvarnames = c("date", "position", "speaker", "language", "city"))
+
+```
+
+Now, we can adjust the Corpus variables:
+
+```{r corpus_variables}
+
+paper_corpus$city <- factor(paper_corpus$city)
+
+paper_corpus$language <- factor(paper_corpus$language)
+
+paper_corpus$date <- dmy(paper_corpus$date)
+
+paper_corpus$year <- year(paper_corpus$date)
+
+paper_corpus$position <- str_replace_all(string = paper_corpus$position, pattern = "chanceler", replacement = "Foreign Minister")
+
+paper_corpus$position <- str_replace_all(string = paper_corpus$position, pattern = "embaixador", replacement = "Ambassador")
+
+paper_corpus$position <- str_replace_all(string = paper_corpus$position, pattern = "presidente", replacement = "President")
+
+paper_corpus$position <- factor(paper_corpus$position)
+
+paper_corpus$speaker <- factor(paper_corpus$speaker)
+
+```
+
+# Dictionaries 
+
+Now, we load the dictionaries used to discover the main findings of the paper. 
+
+```{r dictionaries}
+
+dict_projects <- dictionary(file = "dictionary_projects.yml", format = "YAML") 
+
+dict_abstract <- dictionary(file = "dictionary_abstract mentions.yml", format = "YAML")
+
+dict_abstract
+dict_projects
+
+```
+
+# Speakers (Methodology)
+
+The speakers under analysis and how many discourses they pronounced in our Corpus:
+
+```{r speakers, message=FALSE, warning=FALSE}
+
+speaker <- paper_corpus %>% select(speaker, position) %>% group_by(speaker, position) %>% count(speaker, position)
+
+speaker$position <- str_to_upper(speaker$position)
+
+speakersChart <- ggplot(speaker, aes(x=reorder(speaker, n), y=n)) + 
+  geom_segment(aes(xend = speaker, yend = 0)) +
+  geom_point(color = "black", size = 2) + coord_flip() + theme_bw() +
+  facet_wrap(~position, ncol = 3, scales = "free_y", strip.position = "top") +
+  scale_y_continuous(expand = c(0,0), limits = c(0, 6.2)) +
+  theme(axis.title = element_blank(), 
+        axis.text = element_text(size = rel(1.5), colour = "black"), 
+        strip.text = element_text(size = rel(1.3), colour = "black"), 
+        strip.background = element_rect(fill = "gray93")) 
+
+speakersChart <- plot_grid(speakersChart %+% 
+            subset(speaker, position %in% c("PRESIDENT", "AMBASSADOR")), 
+          speakersChart %+%
+            subset(speaker, position == "FOREIGN MINISTER"),nrow = 2)
+
+# ggsave(filename = "G1-speakers.png", plot = speakersChart, dpi = 600, width = 7.8, height = 7.2)
+
+```
+
+# Results (Quantitative)
+
+First, how frequent were each project emcompassing the American regionalism.
+
+```{r frequency_projects}
+
+freq_mentions_regionalism <- paper_corpus %>% corpus() %>% 
+  tokens() %>% tokens_lookup(dictionary = dict_projects, levels = 2) %>%
+  dfm()
+
+prevalence_index <- tibble(project = c("ALADI*", "ALBA*", "CAN*", "CARICOM", "CEPAL", "FTAA", "IDB", "ISHR*", "MERCOSUR", "NAFTA", "OAS", "OPA", "PACIFIC ALLIANCE", "PARLATINO", "RIO GROUP", "UNASUR*"), year_of_existence = c(1960, 2004, 1969, 1973, 1948, 1994, 1959, 1948, 1994, 1994, 1948, 1958, 2011, 1964, 1986, 2004), project_freq = c(2, 0, 1, 0, 0, 1, 0, 2, 36, 1, 11, 9, 2, 0, 4, 12))
+
+prevalence_index$years_existence <- 2019-prevalence_index$year_of_existence
+prevalence_index$pi <- (prevalence_index$project_freq/prevalence_index$years_existence) %>% round(2)
+
+freq_mentions_regionalism <- convert(freq_mentions_regionalism, to = "data.frame")
+freq_mentions_regionalism$year <- paper_corpus$year
+freq_mentions_regionalism <- freq_mentions_regionalism %>% 
+  gather(key = "projects", value = "frequency", -doc_id, -year)
+
+freq_mentions_regionalism <- freq_mentions_regionalism %>% group_by(projects) %>% 
+  mutate(total_freq = sum(frequency)) 
+
+freq_mentions_regionalism$projects <- str_to_upper(freq_mentions_regionalism$projects)
+
+freq_mentions_regionalism$pi <- ifelse(str_starts(freq_mentions_regionalism$projects, "MER"), 1.44,  ifelse(str_starts(freq_mentions_regionalism$projects, "UNA"), 0.80, ifelse(str_starts(freq_mentions_regionalism$projects, "PAC"), 0.25, ifelse(str_starts(freq_mentions_regionalism$projects, "OAS"), 0.15, ifelse(str_starts(freq_mentions_regionalism$projects, "OPA"), 0.15, ifelse(str_starts(freq_mentions_regionalism$projects, "RIO"), 0.12, ifelse(str_starts(freq_mentions_regionalism$projects, "FTAA"), 0.04, ifelse(str_starts(freq_mentions_regionalism$projects, "NAFT"), 0.04, ifelse(str_starts(freq_mentions_regionalism$projects, "ALAD"), 0.03, ifelse(str_starts(freq_mentions_regionalism$projects, "ISH"), 0.03, ifelse(str_starts(freq_mentions_regionalism$projects, "CAN"), 0.02, 0.0))))))))))) 
+
+freq_mentions_regionalism$labels <- paste0(freq_mentions_regionalism$projects, " \n (Freq = ", freq_mentions_regionalism$total_freq, " / PI = ", freq_mentions_regionalism$pi, ")")
+
+freqreg <- ggplot(freq_mentions_regionalism, aes(x=year, y=frequency)) + 
+  geom_line(size = .8) + theme_bw() +
+  facet_wrap(~ labels, ncol = 2) + 
+  theme(axis.title = element_blank(), 
+        axis.text = element_text(size = rel(1.4), colour = "black"), 
+        strip.text.x = element_text(size = 15), 
+        strip.background = element_rect(fill = "gray93"), 
+        panel.spacing.x = unit(1.2, "lines"),
+        text = element_text(family = "Arial")) +
+  scale_x_continuous(breaks = c(1946, 1958, 1970, 1982, 1994, 2006, 2019))
+freqreg
+
+# ggsave(filename = "G2-projects_freq.png", plot = freqreg, dpi = 500, width = 8, height = 12)
+
+```
+
+Now, the frequency of mentions to regionalism as an abstract concept
+
+```{r abstr_mention_reg}
+
+freq_abstract_mentions <- paper_corpus %>% corpus() %>% 
+  tokens() %>% tokens_lookup(dictionary = dict_abstract, levels = 1:2) %>%
+  dfm()
+
+freq_abstract_mentions <- convert(freq_abstract_mentions, to = "data.frame")
+freq_abstract_mentions$year <- paper_corpus$year
+freq_abstract_mentions <- freq_abstract_mentions %>% 
+  gather(key = "abstract_mentions", value = "frequency", -doc_id, -year)
+
+freq_abstract_mentions <- separate(freq_abstract_mentions, 
+                                   col = abstract_mentions, 
+                                   into = c("dimension", "abs.mentions"),
+                                   sep = "[/.]")
+
+freq_abstract_mentions_table <- freq_abstract_mentions %>% 
+  select(abs.mentions, frequency) %>% group_by(abs.mentions) %>%
+  summarise(freq = sum(frequency))
+
+kable(freq_abstract_mentions_table) 
+
+```
+
+
+Comparing the frequency in which different speakers mentioned the regionalism:
+
+```{r reg_mentions_speakers_condition}
+
+condition <- freq_mentions_regionalism %>% select(projects, frequency, doc_id)
+
+colnames(condition) <- c("projects", "frequency", "document")
+
+condition$document <- gsub("(embaixador).*", "\\1", condition$document) 
+condition$document <- gsub("(chanceler).*", "\\1", condition$document) 
+condition$document <- gsub("(presidente).*", "\\1", condition$document) 
+condition$document <- str_remove_all(condition$document, '[0-9]+')
+condition$document <- str_remove_all(condition$document, "[.._]")
+
+condition$document <- str_replace_all(string = condition$document, pattern = "chanceler", replacement = "Foreign Minister")
+condition$document <- str_replace_all(string = condition$document, pattern = "embaixador", replacement = "Ambassador")
+condition$document <- str_replace_all(string = condition$document, pattern = "presidente", replacement = "President")
+
+condition <- condition %>% group_by(document, projects) %>% summarise(freq = sum(frequency))
+
+condition$projects <- str_remove_all(condition$projects, "=")
+condition$projects <- str_remove_all(condition$projects, '[0-9]+')
+condition$projects <- str_remove_all(condition$projects, "[*]")
+condition$document <- str_to_upper(condition$document)
+  
+conditionsReg <- ggplot(condition, aes(x=reorder(projects, freq), y=freq)) + 
+  geom_point(shape = ifelse(condition$freq > 0, 19, 4), size = 3) +
+  geom_segment(aes(xend = projects, yend = 0)) +
+  facet_wrap(~document, ncol = 3) + coord_flip() +
+  theme_bw() +
+  theme(axis.title = element_blank(), 
+        axis.text = element_text(size = rel(1.1), colour = "black"), 
+        strip.text = element_text(size = rel(1.3), colour = "black"), 
+        strip.background = element_rect(fill = "gray93"),
+        text = element_text(family = "Arial")) 
+
+# ggsave(filename = "G3-freq_speaker_condition_reg.png", plot = conditionsReg, dpi = 500, width = 8, height = 4)
+
+```
+
+To compare the frequency in which different speakers mentioned the regionalism as bring an abstract concept, we employed the following commands: 
+
+```{r abstract_reg_mentions_speaker_condit}
+
+abstr_conditions <- freq_abstract_mentions %>% select(abs.mentions, frequency, doc_id)
+
+colnames(abstr_conditions) <- c("abs.mentions", "frequency", "document")
+
+abstr_conditions$document <- gsub("(embaixador).*", "\\1", abstr_conditions$document) 
+abstr_conditions$document <- gsub("(chanceler).*", "\\1", abstr_conditions$document) 
+abstr_conditions$document <- gsub("(presidente).*", "\\1", abstr_conditions$document) 
+abstr_conditions$document <- str_remove_all(abstr_conditions$document, '[0-9]+')
+abstr_conditions$document <- str_remove_all(abstr_conditions$document, "[.._]")
+
+abstr_conditions$document <- str_replace_all(string = abstr_conditions$document, pattern = "chanceler", replacement = "Foreign Minister")
+abstr_conditions$document <- str_replace_all(string = abstr_conditions$document, pattern = "embaixador", replacement = "Ambassador")
+abstr_conditions$document <- str_replace_all(string = abstr_conditions$document, pattern = "presidente", replacement = "President")
+
+abstr_conditions <- abstr_conditions %>% group_by(document, abs.mentions) %>% summarise(freq = sum(frequency))
+
+abstr_conditions$abs.mentions <- str_to_upper(abstr_conditions$abs.mentions)
+abstr_conditions$document <- str_to_upper(abstr_conditions$document)
+
+conditionsRegAbs <- ggplot(abstr_conditions, aes(x=reorder(abs.mentions, freq), y=freq)) + 
+  geom_point(shape = ifelse(abstr_conditions$freq > 0, 19, 4), size = 3) +
+  geom_segment(aes(xend = abs.mentions, yend = 0)) +
+  facet_wrap(~document, ncol = 3, scales = "free_x") + coord_flip() +
+  theme_bw() +
+  theme(axis.title = element_blank(), 
+        axis.text = element_text(size = rel(1.1), colour = "black"), 
+        strip.text = element_text(size = rel(1.3), colour = "black"), 
+        strip.background = element_rect(fill = "gray93"),
+        text = element_text(family = "Arial")) 
+
+# ggsave(filename = "G4-freq_speaker_condition_abs_reg.png", plot = conditionsRegAbs, dpi = 500, width = 9.8, height = 4)
+
+```
+
+
+Finally, what is behind the context of the words "cooperation" and "integration"? 
+
+```{r context_coop_integration}
+
+# Cooperation
+
+whatsbehind_cooperation <- paper_corpus %>% corpus() %>% tokens(remove_punct = FALSE, remove_numbers= TRUE, remove_symbols = TRUE) %>% tokens_tolower() %>% tokens_remove(c(stopwords(language = "portuguese"), "e", "é"), padding = TRUE) %>% 
+  textstat_collocations(min_count = 1) %>% tibble()
+
+whatsbehind_cooperation <- filter(whatsbehind_cooperation, grepl("cooperação", collocation)) %>% select(collocation, count) %>% 
+  top_n(15)
+
+# Saving the file to translate: write_csv(whatsbehind_cooperation, here::here("coop and integ context", "cooperation_context_pt.csv"))
+
+whatsbehind_cooperation <- read_csv(here("coop and integ context", "cooperation_context_eng.csv"))
+
+whatsbehind_cooperation_plot <- ggplot(whatsbehind_cooperation, aes(x = reorder(collocation, count), y = count)) + geom_point(size = 3) +
+  geom_segment(aes(xend = collocation, yend = 0)) + coord_flip() + 
+  theme_bw() +
+  theme(axis.title = element_blank(), 
+        axis.text = element_text(size = rel(1.1), colour = "black"), 
+        strip.text = element_text(size = rel(1.3), colour = "black"), 
+        strip.background = element_rect(fill = "white"),
+        text = element_text(family = "Arial"), 
+        plot.title = element_text(hjust = 1, face = "bold.italic")) +
+  ggtitle("COOPERATION")
+
+# Integration 
+
+whatsbehind_integration <- paper_corpus %>% corpus() %>% tokens(remove_punct = FALSE, remove_numbers= TRUE, remove_symbols = TRUE) %>% tokens_tolower() %>% tokens_remove(c(stopwords(language = "portuguese"), "e", "é"), padding = TRUE) %>% 
+  textstat_collocations(min_count = 1) %>% tibble()
+
+whatsbehind_integration <- filter(whatsbehind_integration, grepl("integração", collocation)) %>% select(collocation, count) %>% 
+  top_n(15)
+
+# Saving the file to translate: write_csv(whatsbehind_integration, here::here("coop and integ context", "integration_context_pt.csv"))
+
+whatsbehind_integration<- read_csv(here("coop and integ context", "integration_context_eng.csv"))
+
+whatsbehind_integration_plot <- ggplot(whatsbehind_integration, aes(x = reorder(collocation, count), y = count)) + geom_point(size = 3) +
+  geom_segment(aes(xend = collocation, yend = 0)) + coord_flip() + 
+  theme_bw() +
+  theme(axis.title = element_blank(), 
+        axis.text = element_text(size = rel(1.1), colour = "black"), 
+        strip.text = element_text(size = rel(1.3), colour = "black"), 
+        strip.background = element_rect(fill = "white"),
+        text = element_text(family = "Arial"), 
+        plot.title = element_text(hjust = 1, face = "bold.italic")) +
+  ggtitle("INTEGRATION") + 
+  scale_y_continuous(breaks = c(0, 2, 5, 7, 9, 10))
+
+whats_behind <- whatsbehind_cooperation_plot + whatsbehind_integration_plot
+whats_behind
+
+# ggsave(filename = "G5-coop_integr_context.png", plot = whats_behind, dpi = 500, width = 9, height = 5.4)
+
+```
+
+
+# Results (Qualitative)
+
+When it comes to the qualitative analysis and interpretation of the results, we have used, as our main basis for reading, the following commands to segment and create the txt files that are stored in the folder "qualitative analysis (texts used)". 
+
+```{r kwic}
+
+mercosur_kwic <- paper_corpus%>% corpus() %>% kwic(phrase(dict_projects[["INTRA-REGIONAL PROJECTS"]][["MERCOSUR"]]), window = 30, case_insensitive = TRUE)
+mercosur_kwic <- as.data.frame(mercosur_kwic)
+mercosur_kwic <- mercosur_kwic %>% select(-from, -to)
+#write.table(mercosur_kwic, here::here("qualitative analysis (texts used)", "mercosur.kwic.txt")
+
+can_kwic <- paper_corpus %>% corpus() %>% kwic(phrase(dict_projects[["INTRA-REGIONAL PROJECTS"]][["CAN*"]]), window = 30, case_insensitive = TRUE)
+can_kwic <- as.data.frame(can_kwic)
+can_kwic <- can_kwic %>% select(-from, -to)
+#write.table(can_kwic, here::here("qualitative analysis (texts used)", "can.kwic.txt")
+
+ftaa_kwic <- paper_corpus %>% corpus() %>% kwic(phrase(dict_projects[["HEMISPHERIC PROJECTS"]][["FTAA"]]), window = 30, case_insensitive = TRUE)
+ftaa_kwic <- as.data.frame(ftaa_kwic)
+ftaa_kwic <- ftaa_kwic %>% select(-from, -to)
+#write.table(ftaa_kwic, here::here("qualitative analysis (texts used)", "ftaa.kwic.txt")
+
+lafta_kwic <- paper_corpus %>% corpus() %>% kwic(phrase(dict_projects[["INTRA-REGIONAL PROJECTS"]][["ALADI*"]]), window = 30, case_insensitive = TRUE)
+lafta_kwic <- as.data.frame(lafta_kwic)
+lafta_kwic <- lafta_kwic %>% select(-from, -to)
+#write.table(lafta_kwic, here::here("qualitative analysis (texts used)", "lafta.kwic.txt")
+
+nafta_kwic <- paper_corpus %>% corpus() %>% kwic(phrase(dict_projects[["HEMISPHERIC PROJECTS"]][["NAFTA"]]), window = 30, case_insensitive = TRUE)
+nafta_kwic <- as.data.frame(nafta_kwic)
+nafta_kwic <- nafta_kwic %>% select(-from, -to)
+#write.table(nafta_kwic, here::here("qualitative analysis (texts used)", "nafta_kwic.txt")
+
+oas_kwic <- paper_corpus %>% corpus() %>% kwic(phrase(dict_projects[["HEMISPHERIC PROJECTS"]][["OAS"]]), window = 30, case_insensitive = TRUE)
+oas_kwic <- as.data.frame(oas_kwic)
+oas_kwic <- oas_kwic %>% select(-from, -to)
+#write.table(oas_kwic, here::here("qualitative analysis (texts used)", "oas_kwic.txt")
+
+pacific_alliance_kwic <- paper_corpus %>% corpus() %>% kwic(phrase(dict_projects[["INTRA-REGIONAL PROJECTS"]][["PACIFIC ALLIANCE"]]), window = 30, case_insensitive = TRUE)
+pacific_alliance_kwic <- as.data.frame(pacific_alliance_kwic)
+pacific_alliance_kwic <- pacific_alliance_kwic %>% select(-from, -to)
+#write.table(pacific_alliance_kwic, here::here("qualitative analysis (texts used)", "pacific_alliance_kwic.txt")
+
+unasur_kwic <- paper_corpus %>% corpus() %>% kwic(phrase(dict_projects[["INTRA-REGIONAL PROJECTS"]][["UNASUR*"]]), window = 30, case_insensitive = TRUE)
+unasur_kwic <- as.data.frame(unasur_kwic)
+unasur_kwic <- unasur_kwic %>% select(-from, -to)
+#write.table(unasur_kwic, here::here("qualitative analysis (texts used)", "unasur_kwic.txt")
+
+ishr_kwic <- paper_corpus %>% corpus() %>% kwic(phrase(dict_projects[["HEMISPHERIC PROJECTS"]][["ISHR*"]]), window = 30, case_insensitive = TRUE)
+ishr_kwic <- as.data.frame(ishr_kwic)
+ishr_kwic <- ishr_kwic %>% select(-from, -to)
+#write.table(ishr_kwic, here::here("qualitative analysis (texts used)", "ishr_kwic.txt"))
+
+opa_kwic <- paper_corpus %>% corpus() %>% kwic(phrase(dict_projects[["HEMISPHERIC PROJECTS"]][["OPA"]]), window = 30, case_insensitive = TRUE)
+opa_kwic <- as.data.frame(opa_kwic)
+opa_kwic <- opa_kwic %>% select(-from, -to)
+#write.table(opa_kwic, here::here("qualitative analysis (texts used)", "opa_kwic.txt"))
+
+rio_group_kwic <- paper_corpus %>% corpus() %>% kwic(phrase(dict_projects[["INTRA-REGIONAL PROJECTS"]][["RIO GROUP"]]), window = 30, case_insensitive = TRUE)
+rio_group_kwic <- as.data.frame(rio_group_kwic)
+rio_group_kwic <- rio_group_kwic %>% select(-from, -to)
+# write.table(rio_group_kwic, here::here("qualitative analysis (texts used)", "rio_group_kwic.txt"))
+
+#Note: Cepal, IDB, ALBA, Parlatino and Caricom was not made because they have zero mentions!
+
+```
+

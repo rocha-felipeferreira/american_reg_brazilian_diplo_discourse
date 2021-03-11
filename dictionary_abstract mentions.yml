@@ -1,0 +1,15 @@
+INTRA-REGIONAL:
+    'Latin American Cooperation': [cooperação latino-americana, cooperação latina, cooperação latinoamericana]
+    'Latin American Integration': [integração latino-americana, integração latina, integração latinoamericana]
+    'South American Cooperation': [cooperação sul-americana] 
+    'South American Integration': [integração sul-americana] 
+
+HEMISPHERIC:
+    'Hemispheric Cooperation': [cooperação hemisférica, cooperação americana]
+    'Hemispheric Integration': [integração hemisférica, integração americana]
+    
+GENERAL:
+    'Regional Integration': [integração regional]
+    'Regional Cooperation': [cooperação regional]
+    'Integration': [integração]
+    'Cooperation': [cooperação]
