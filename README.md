@@ -1,7 +1,7 @@
 ## American Regionalism and Brazilian Diplomatic Discourse (1946-2019) 
 #### By Felipe Rocha & Marcelo de Almeida Medeiros
 
-* [Click to read the paper 📚:](https://doi.org/10.1590/s0102-8529.2019430100002) 
+📚 [Click to read the paper](https://doi.org/10.1590/s0102-8529.2019430100002) 
 * [Click to access Dataverse files](https://doi.org/10.7910/DVN/9WLKRO)
 
 **ABSTRACT**
