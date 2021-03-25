@@ -11,8 +11,8 @@ In this article, we analyse the content of the speeches delivered by Brazilian P
 
 ### Datasource
 - [Corrêa, L F de S. 2012. O Brasil nas Nações Unidas, 1946-2011. Brasília: Fundação Alexandre de Gusmão](http://funag.gov.br/loja/index.php?route=product/product&product_id=124)
-- The Library of the Presidency of the Republic;
-- Itamaraty.
+- [The Library of the Presidency of the Republic](http://www.biblioteca.presidencia.gov.br/)
+- [Itamaraty](https://www.gov.br/mre/pt-br)
 
 ### Tools & Techniques
 - Content Analysis;
