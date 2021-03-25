@@ -29,6 +29,6 @@ The most repeated expressions on cooperation and integration             |  Ment
 
 Mentions of regional projects at UN Assembly Sessions |
 :-------------------------:|
-![](https://user-images.githubusercontent.com/34004529/112511957-aab8f100-8d71-11eb-8954-1848cb6b6b6c.jpg)  |
+![] <img src="https://user-images.githubusercontent.com/34004529/112511957-aab8f100-8d71-11eb-8954-1848cb6b6b6c.jpg" width="425"/> |
                        
                        
