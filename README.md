@@ -5,8 +5,9 @@
 
 📂 [Click to access Dataverse files](https://doi.org/10.7910/DVN/9WLKRO)
 
-![g](https://user-images.githubusercontent.com/34004529/112485599-df20b300-8d59-11eb-8c7d-27ca6512351f.jpg)
-
+<p float="left">
+  <img src="https://user-images.githubusercontent.com/34004529/112485912-28710280-8d5a-11eb-90e9-99a2c0ebe42a.jpg" width="100" />
+</p>
 
 **ABSTRACT**
 
