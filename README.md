@@ -6,7 +6,7 @@
 📂 [Click to access Dataverse files](https://doi.org/10.7910/DVN/9WLKRO)
 
 <p float="left">
-  <img src="https://user-images.githubusercontent.com/34004529/112486248-771e9c80-8d5a-11eb-8737-985ecfd1cbb8.jpg" width="50%" />
+  <img src="https://user-images.githubusercontent.com/34004529/112486248-771e9c80-8d5a-11eb-8737-985ecfd1cbb8.jpg" width="40%" />
   <img src="https://user-images.githubusercontent.com/34004529/112486321-87cf1280-8d5a-11eb-8897-8455d0fad8fc.jpg" width="50%" />
 </p>
 
