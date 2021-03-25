@@ -19,10 +19,10 @@ In this article, we analyse the content of the **speeches** delivered by **Brazi
 - Statistics
 - R (Quanteda + Tidyverse)
 
-### VISUAL GALLERY 
+### VISUAL GALLERY (SAMPLE)
 
 
-The most repeated expressions on cooperation and integration             |  Solarized Ocean
+The most repeated expressions on cooperation and integration             |  Frequency of mentions of regional projects by different speakers 
 :-------------------------:|:-------------------------:
 ![](https://user-images.githubusercontent.com/34004529/112486248-771e9c80-8d5a-11eb-8737-985ecfd1cbb8.jpg)  |  ![](https://user-images.githubusercontent.com/34004529/112486321-87cf1280-8d5a-11eb-8897-8455d0fad8fc.jpg)
 
