@@ -27,5 +27,10 @@ In this article, we analyse the content of the **speeches** delivered by **Brazi
   <img src="https://user-images.githubusercontent.com/34004529/112485912-28710280-8d5a-11eb-90e9-99a2c0ebe42a.jpg" width="40%" />
 </p>
 
+Solarized dark             |  Solarized Ocean
+:-------------------------:|:-------------------------:
+![](https://user-images.githubusercontent.com/34004529/112486248-771e9c80-8d5a-11eb-8737-985ecfd1cbb8.jpg)  |  ![](https://user-images.githubusercontent.com/34004529/112486248-771e9c80-8d5a-11eb-8737-985ecfd1cbb8.jpg)
 
-                                                                                                                                         
+
+                       
+                       
