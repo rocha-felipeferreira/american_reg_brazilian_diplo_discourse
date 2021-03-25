@@ -24,12 +24,12 @@ In this article, we analyse the content of the speeches delivered by Brazilian P
 
 Most repeated expressions on cooperation and integration             |  Mentions to regional projects by different speakers 
 :-------------------------:|:-------------------------:
-![](https://user-images.githubusercontent.com/34004529/112486248-771e9c80-8d5a-11eb-8737-985ecfd1cbb8.jpg)  |  ![](https://user-images.githubusercontent.com/34004529/112486321-87cf1280-8d5a-11eb-8897-8455d0fad8fc.jpg)
+![dksnkdndjd](https://user-images.githubusercontent.com/34004529/112486248-771e9c80-8d5a-11eb-8737-985ecfd1cbb8.jpg)  |  ![](https://user-images.githubusercontent.com/34004529/112486321-87cf1280-8d5a-11eb-8897-8455d0fad8fc.jpg)
 
 
 
 <p align="center">
-  <b>Mentions of regional projects at UN Assembly Sessions</b>
+  <b>Mentions to regional projects at UN Assembly Sessions</b>
 </p>
 
 <p align="center">  
