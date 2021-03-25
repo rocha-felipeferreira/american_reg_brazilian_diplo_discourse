@@ -16,8 +16,8 @@ In this article, we analyse the content of the speeches delivered by Brazilian P
 
 ### Tools & Techniques
 - Content Analysis;
-- Statistics
-- R (Quanteda + Tidyverse)
+- Statistics;
+- R (Quanteda + Tidyverse);
 
 ### Visual Gallery (Sample)
 
