@@ -33,6 +33,5 @@ The most repeated expressions on cooperation and integration             |  Ment
 </p>
 
 <p align="center">  
-<img src="https://user-images.githubusercontent.com/34004529/112511957-aab8f100-8d71-11eb-8954-1848cb6b6b6c.jpg" width="425"/> |
+<img src="https://user-images.githubusercontent.com/34004529/112511957-aab8f100-8d71-11eb-8954-1848cb6b6b6c.jpg" width="425"/>
 <p>                     
-                       
