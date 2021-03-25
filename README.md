@@ -10,7 +10,7 @@
 In this article, we analyse the content of the speeches delivered by Brazilian Presidents, Foreign Ministers and Ambassadors at annual Ordinary Sessions of the United Nations General Assembly in the period between 1946 and 2019. Our primary objective is to find out how often and under what circumstances Brazilian diplomats mentioned the subject of American regionalism and whether the mention was made in reference to specific projects or to abstract concepts of regional integration and cooperation. Based on this analysis, we highlight the great deal of importance that was given to MERCOSUR – and, to a lesser extent, UNASUR – to the detriment of other regional integration projects, as well as the preference by Brazilian diplomats, for a flexible, low-profile, abstract and low-cost discursive approach. In short, we found that cooperation and integration have frequently been discussed, although little attention has been devoted to the limits and possibilities of each project under construction.
 
 ### Datasource
-- Corrêa, L F de S. 2012. O Brasil nas Nações Unidas, 1946-2011. Brasília: Fundação Alexandre de Gusmão;
+- [Corrêa, L F de S. 2012. O Brasil nas Nações Unidas, 1946-2011. Brasília: Fundação Alexandre de Gusmão](http://funag.gov.br/loja/index.php?route=product/product&product_id=124)
 - The Library of the Presidency of the Republic;
 - Itamaraty.
 
@@ -24,7 +24,7 @@ In this article, we analyse the content of the speeches delivered by Brazilian P
 
 Most repeated expressions on cooperation and integration             |  Mentions to regional projects by different speakers 
 :-------------------------:|:-------------------------:
-![dksnkdndjd](https://user-images.githubusercontent.com/34004529/112486248-771e9c80-8d5a-11eb-8737-985ecfd1cbb8.jpg)  |  ![](https://user-images.githubusercontent.com/34004529/112486321-87cf1280-8d5a-11eb-8897-8455d0fad8fc.jpg)
+![](https://user-images.githubusercontent.com/34004529/112486248-771e9c80-8d5a-11eb-8737-985ecfd1cbb8.jpg)  |  ![](https://user-images.githubusercontent.com/34004529/112486321-87cf1280-8d5a-11eb-8897-8455d0fad8fc.jpg)
 
 
 
