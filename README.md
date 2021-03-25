@@ -15,9 +15,9 @@ In this article, we analyse the content of the speeches delivered by Brazilian P
 - [Itamaraty](https://www.gov.br/mre/pt-br)
 
 ### Tools & Techniques
-- Content Analysis;
-- Statistics;
-- R (Quanteda + Tidyverse);
+- Content Analysis
+- Statistics
+- R
 
 ### Visual Gallery (Sample)
 
